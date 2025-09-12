@@ -1,8 +1,13 @@
 package com.udacity.vehicles.api;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.udacity.vehicles.client.maps.MapsClient;
@@ -15,6 +20,7 @@ import com.udacity.vehicles.domain.manufacturer.Manufacturer;
 import com.udacity.vehicles.service.CarService;
 import java.net.URI;
 import java.util.Collections;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +94,19 @@ public class CarControllerTest {
          *   below (the vehicle will be the first in the list).
          */
 
+        int id = 1;
+        Car car = getCar();
+        mvc.perform(get(new URI("/cars"))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._embedded.carList").isArray())
+                .andExpect(jsonPath("$._embedded.carList", hasSize(1)))
+                .andExpect(jsonPath("$._embedded.carList[0].id").value(id))
+                .andExpect(jsonPath("$._embedded.carList[0].details.model").value(car.getDetails().getModel()))
+                .andExpect(jsonPath("$._embedded.carList[0].details.body").value(car.getDetails().getBody()))
+                .andExpect(jsonPath("$._embedded.carList[0].details.numberOfDoors").value(car.getDetails().getNumberOfDoors()))
+                .andExpect(jsonPath("$._embedded.carList[0].details.fuelType").value(car.getDetails().getFuelType()))
+                .andExpect(jsonPath("$._embedded.carList[0].details.engine").value(car.getDetails().getEngine()));
     }
 
     /**
@@ -100,6 +119,17 @@ public class CarControllerTest {
          * TODO: Add a test to check that the `get` method works by calling
          *   a vehicle by ID. This should utilize the car from `getCar()` below.
          */
+        int id = 1;
+        Car car = getCar();
+        mvc.perform(get(new URI("/cars/"+id))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(id))
+                .andExpect(jsonPath("details.model").value(car.getDetails().getModel()))
+                .andExpect(jsonPath("details.body").value(car.getDetails().getBody()))
+                .andExpect(jsonPath("details.numberOfDoors").value(car.getDetails().getNumberOfDoors()))
+                .andExpect(jsonPath("details.fuelType").value(car.getDetails().getFuelType()))
+                .andExpect(jsonPath("details.engine").value(car.getDetails().getEngine()));
     }
 
     /**
@@ -113,6 +143,38 @@ public class CarControllerTest {
          *   when the `delete` method is called from the Car Controller. This
          *   should utilize the car from `getCar()` below.
          */
+
+        int id = 1;
+        mvc.perform(delete(new URI("/cars/"+id)))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void updateCar() throws  Exception {
+
+        var newCar = getCar();
+        long id = 1;
+        newCar.setId(id);
+        newCar.getDetails().setMileage(0);
+        newCar.setCondition(Condition.NEW);
+        newCar.getDetails().setModel("Onix");
+
+        given(carService.save(any())).willReturn(newCar);
+
+        mvc.perform(put(new URI("/cars/"+id))
+                .content(json.write(newCar).getJson())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(id))
+                .andExpect(jsonPath("details.mileage").value(newCar.getDetails().getMileage()))
+                .andExpect(jsonPath("details.model").value(newCar.getDetails().getModel()))
+                .andExpect(jsonPath("condition").value(newCar.getCondition().toString()))
+                .andExpect(jsonPath("details.model").value(newCar.getDetails().getModel()))
+                .andExpect(jsonPath("details.body").value(newCar.getDetails().getBody()))
+                .andExpect(jsonPath("details.numberOfDoors").value(newCar.getDetails().getNumberOfDoors()))
+                .andExpect(jsonPath("details.fuelType").value(newCar.getDetails().getFuelType()))
+                .andExpect(jsonPath("details.engine").value(newCar.getDetails().getEngine()));;
     }
 
     /**

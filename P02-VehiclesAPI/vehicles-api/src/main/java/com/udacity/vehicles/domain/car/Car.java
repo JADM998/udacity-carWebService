@@ -3,6 +3,8 @@ package com.udacity.vehicles.domain.car;
 import com.udacity.vehicles.domain.Condition;
 import com.udacity.vehicles.domain.Location;
 import java.time.LocalDateTime;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -26,6 +28,7 @@ public class Car {
 
     @Id
     @GeneratedValue
+    @Schema(hidden = true, example = "1", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private Long id;
 
     @CreatedDate
