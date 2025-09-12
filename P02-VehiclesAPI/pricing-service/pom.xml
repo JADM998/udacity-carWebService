@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.1</version>
+		<version>3.5.5</version>
 		<relativePath/> <!-- lookup parent from com.udacity.pricing.repository -->
 	</parent>
 	<groupId>com.udacity</groupId>
@@ -59,6 +59,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
 			<version>3.4.0</version>
+		</dependency>
+
+<!--		Discovery, routing and gateways-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+			<version>4.3.0</version>
 		</dependency>
 	</dependencies>
 
