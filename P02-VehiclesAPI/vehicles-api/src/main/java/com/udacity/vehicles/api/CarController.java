@@ -61,7 +61,7 @@ class CarController {
          * TODO: Use the `assembler` on that car and return the resulting output.
          *   Update the first line as part of the above implementing.
          */
-        return assembler.toModel(new Car());
+        return assembler.toModel(carService.findById(id));
     }
 
     /**
@@ -77,12 +77,14 @@ class CarController {
          * TODO: Use the `assembler` on that saved car and return as part of the response.
          *   Update the first line as part of the above implementing.
          */
-        EntityModel<Car> resource = assembler.toModel(new Car());
+        EntityModel<Car> resource = assembler.toModel(carService.save(car));
 
         //Note: There will be error on this line till above TODOs are implemented
-        return ResponseEntity.created(new URI(resource.getId().expand().getHref())).body(resource);     
+//        return ResponseEntity.created(new URI(resource.getId().expand().getHref())).body(resource);
+        return ResponseEntity.created(new URI(
+                resource.getRequiredLink("self").getHref()))
+                .body(resource);
 
-        
     }
 
     /**
@@ -99,7 +101,8 @@ class CarController {
          * TODO: Use the `assembler` on that updated car and return as part of the response.
          *   Update the first line as part of the above implementing.
          */
-        EntityModel<Car> resource = assembler.toModel(new Car());
+        car.setId(id);
+        EntityModel<Car> resource = assembler.toModel(carService.save(car));
         return ResponseEntity.ok(resource);
     }
 
@@ -113,6 +116,7 @@ class CarController {
         /**
          * TODO: Use the Car Service to delete the requested vehicle.
          */
+        carService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
