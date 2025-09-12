@@ -1,16 +1,16 @@
-# ND035-P02-VehiclesAPI-Project
+## My Udacity Submission
 
-Project repository for JavaND Project 2, where students implement a Vehicles API using Java and Spring Boot that can communicate with separate location and pricing services.
+Hello, this is my submission for the Bakcned System for a Car Website.
 
-## Instructions
+## Running the app
 
-Check each component to see its details and instructions. Note that all three applications
-should be running at once for full operation. Further instructions are available in the classroom.
+I've developed the app using IntelliJ mostly. All the apps can be run from my local machine. I would start with eureka, then pricingService, mapsService and, finally, vehicleService.
 
-- [Vehicles API](vehicles-api/README.md)
-- [Pricing Service](pricing-service/README.md)
-- [Boogle Maps](boogle-maps/README.md)
+## Configuration
 
-## Dependencies
+I've left most of the project configuration intact.For example, the link to swagger-ui is: [Swagger-UI for Cars API](http://localhost:8080/swagger-ui/index.html#/).
 
-The project requires the use of Maven and Spring Boot, along with Java v11.
+There is one thing I've to notice, while testing the Swagger-ui, it is locked at first time the endpoints which are of the form `/cars/{id}`. You may have to click "Try out" for it to let you change the id. 
+
+I have price ids for the first 20 cars. Further ids wont be available.
+   
